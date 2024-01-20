@@ -17,9 +17,10 @@ class RemoteArticlesLoading extends RemoteArticleState {
 }
 
 class RemoteArticlesDone extends RemoteArticleState {
-  const RemoteArticlesDone(List<ArticleEntity> articles) : super(articles: articles);
+  const RemoteArticlesDone(List<ArticleEntity> articles)
+      : super(articles: articles);
 }
 
 class RemoteArticlesError extends RemoteArticleState {
-  const RemoteArticlesError(DioException error): super(error: error);
+  const RemoteArticlesError(DioException error) : super(error: error);
 }
