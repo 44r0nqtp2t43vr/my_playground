@@ -38,15 +38,6 @@ class BleController extends GetxController {
   Future<List<BluetoothService>> discoverServices() async {
     List<BluetoothService> services = await targetDevice.discoverServices();
     return services;
-    // services.forEach((service) {
-    //   print(service.uuid);
-    //   service.characteristics.forEach((characteristic) {
-    //     print(characteristic.properties.toString());
-    //     if (characteristic.properties.write == true) {
-    //       writeStream(characteristic, "255255255");
-    //     }
-    //   });
-    // });
   }
 
   Future writeData(

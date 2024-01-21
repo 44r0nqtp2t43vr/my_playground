@@ -5,6 +5,8 @@ import 'package:my_playground/features/bluetooth_connect/data/repository/device_
 import 'package:my_playground/features/bluetooth_connect/domain/repository/device_repository.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/get_scanres.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/get_services.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/usecases/refresh_services.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/usecases/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/device/remote/remote_device_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
 import 'package:my_playground/features/daily_news/data/data_sources/local/app_database.dart';
@@ -51,6 +53,10 @@ Future<void> initializeDependencies() async {
 
   sl.registerSingleton<GetServicesUseCase>(GetServicesUseCase(sl()));
 
+  sl.registerSingleton<RefreshServicesUseCase>(RefreshServicesUseCase(sl()));
+
+  sl.registerSingleton<StreamDataUseCase>(StreamDataUseCase(sl()));
+
   // Blocs
   sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
 
@@ -59,5 +65,6 @@ Future<void> initializeDependencies() async {
 
   sl.registerFactory<RemoteDevicesBloc>(() => RemoteDevicesBloc(sl()));
 
-  sl.registerFactory<RemoteServicesBloc>(() => RemoteServicesBloc(sl()));
+  sl.registerFactory<RemoteServicesBloc>(
+      () => RemoteServicesBloc(sl(), sl(), sl()));
 }

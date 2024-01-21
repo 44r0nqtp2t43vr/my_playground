@@ -23,4 +23,10 @@ class DeviceRepositoryImpl implements DeviceRepository {
   Future<void> connectToDevice(BluetoothDevice targetDevice) async {
     await _controller.connectToDevice(targetDevice);
   }
+
+  @override
+  Future<void> streamData(
+      BluetoothCharacteristic characteristic, String data) async {
+    await _controller.writeStream(characteristic, data);
+  }
 }

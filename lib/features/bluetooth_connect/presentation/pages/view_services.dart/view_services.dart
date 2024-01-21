@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/entities/to_stream.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_event.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_state.dart';
+import 'package:my_playground/features/bluetooth_connect/presentation/widgets/chara_card.dart';
 import 'package:my_playground/injection_container.dart';
 
 class ViewServices extends StatelessWidget {
@@ -18,7 +20,7 @@ class ViewServices extends StatelessWidget {
       create: (_) => sl<RemoteServicesBloc>()..add(GetServices(targetDevice)),
       child: Scaffold(
         appBar: _buildAppbar(context),
-        body: _buildBody(),
+        body: _buildBody(context),
       ),
     );
   }
@@ -32,7 +34,7 @@ class ViewServices extends StatelessWidget {
     );
   }
 
-  _buildBody() {
+  _buildBody(BuildContext context) {
     return BlocBuilder<RemoteServicesBloc, RemoteServiceState>(
       builder: (_, state) {
         if (state is RemoteServiceLoading) {
@@ -41,27 +43,45 @@ class ViewServices extends StatelessWidget {
           );
         }
         if (state is RemoteServiceDone) {
-          return Center(
-            child: ListView.builder(
-              itemCount: state.services!.length,
-              itemBuilder: (context, index) {
-                final data = state.services![index];
-                return Card(
-                  elevation: 2,
-                  child: InkWell(
-                    onTap: () {},
-                    child: ListTile(
-                      title: Text(data.deviceId.id),
-                      subtitle: Text(data.uuid.toString()),
-                    ),
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                for (var service in state.services!) ...[
+                  Text('UUID: ${service.uuid.toString()}'),
+                  Column(
+                    children: [
+                      for (var characteristic in service.characteristics) ...[
+                        CharaCard(
+                          onTap: () => _onCharaCardPressed(
+                              context, characteristic, "255255255"),
+                          characteristic: characteristic,
+                        ),
+                      ],
+                    ],
                   ),
-                );
-              },
+                  const SizedBox(height: 16.0),
+                ],
+              ],
             ),
           );
         }
         return const SizedBox();
       },
+    );
+  }
+
+  void _onCharaCardPressed(BuildContext context,
+      BluetoothCharacteristic characteristic, String data) {
+    sl<RemoteServicesBloc>().add(StreamData(ToStreamEntity(
+      characteristic: characteristic,
+      data: data,
+    )));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('Streaming to ${characteristic.uuid.toString()}...'),
+      ),
     );
   }
 }
