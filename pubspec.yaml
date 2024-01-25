@@ -54,6 +54,12 @@ dependencies:
   # permissions
   permission_handler: ^11.1.0
 
+  # firebase
+  firebase_core: ^2.24.2
+
+  # firebase auth
+  firebase_auth: ^4.16.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

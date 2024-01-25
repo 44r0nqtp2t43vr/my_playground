@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_devices/view_devices.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_services.dart/view_services.dart';
+import 'package:my_playground/features/user/presentation/pages/login/login_screen.dart';
+import 'package:my_playground/features/user/presentation/pages/register/register_screen.dart';
 
 import '../../features/daily_news/domain/entities/article.dart';
 import '../../features/daily_news/presentation/pages/article_detail/article_detail.dart';
@@ -12,7 +14,13 @@ class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return _materialRoute(const ViewDevices());
+        return _materialRoute(const LoginScreen());
+
+      case '/Login':
+        return _materialRoute(const LoginScreen());
+
+      case '/Register':
+        return _materialRoute(const RegisterScreen());
 
       case '/ViewDevices':
         return _materialRoute(const ViewDevices());
@@ -32,7 +40,7 @@ class AppRoutes {
         return _materialRoute(const SavedArticles());
 
       default:
-        return _materialRoute(const ViewDevices());
+        return _materialRoute(const LoginScreen());
     }
   }
 

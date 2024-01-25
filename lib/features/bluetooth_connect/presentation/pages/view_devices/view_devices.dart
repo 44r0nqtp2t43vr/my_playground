@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,15 @@ class ViewDevices extends StatelessWidget {
         'Bluetooth Devices',
         style: TextStyle(color: Colors.black),
       ),
+      automaticallyImplyLeading: false,
       actions: [
+        GestureDetector(
+          onTap: () => _onLogOutButtonPressed(context),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            child: Icon(Icons.exit_to_app, color: Colors.black),
+          ),
+        ),
         GestureDetector(
           onTap: () => _onDailyNewsViewTapped(context),
           child: const Padding(
@@ -166,6 +175,16 @@ class ViewDevices extends StatelessWidget {
       BuildContext context, BluetoothDevice targetDevice) {
     // BlocProvider.of<RemoteServicesBloc>(context).add(GetServices(targetDevice));
     Navigator.pushNamed(context, '/ViewServices', arguments: targetDevice);
+  }
+
+  void _onLogOutButtonPressed(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance
+          .signOut()
+          .then((value) => Navigator.pushNamed(context, '/Login'));
+    } else {
+      Navigator.pushNamed(context, '/Login');
+    }
   }
 
   void _onDailyNewsViewTapped(BuildContext context) {

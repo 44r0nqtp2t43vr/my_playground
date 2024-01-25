@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "350370295589",
+    "project_id": "my-playground-edf1e",
+    "storage_bucket": "my-playground-edf1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350370295589:android:ec29e72b67c28a0cc234cc",
+        "android_client_info": {
+          "package_name": "com.example.my_playground"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn5OGgdwEsET-i9oomq7nchYescEJznq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
