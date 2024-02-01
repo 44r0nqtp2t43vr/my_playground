@@ -60,6 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
               text: 'Continue as Guest',
             ),
             const SizedBox(height: 16.0),
+            Button(
+              onPressed: () => _onGameViewTapped(context),
+              text: 'Play Game',
+            ),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),
@@ -78,5 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onContinueViewTapped(BuildContext context) {
     Navigator.pushNamed(context, '/ViewDevices');
+  }
+
+  void _onGameViewTapped(BuildContext context) {
+    Navigator.pushNamed(context, '/PlayGame');
   }
 }

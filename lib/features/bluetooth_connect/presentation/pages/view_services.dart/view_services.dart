@@ -56,9 +56,9 @@ class ViewServices extends StatelessWidget {
                           onTap: () => _onCharaCardPressed(
                             context,
                             characteristic,
-                            "255255255",
+                            "<255255255255255000000000000000>",
                             1000 * 60 * 60,
-                            1000,
+                            20,
                           ),
                           characteristic: characteristic,
                         ),
