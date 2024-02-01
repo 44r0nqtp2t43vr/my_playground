@@ -54,7 +54,12 @@ class ViewServices extends StatelessWidget {
                       for (var characteristic in service.characteristics) ...[
                         CharaCard(
                           onTap: () => _onCharaCardPressed(
-                              context, characteristic, "255255255"),
+                            context,
+                            characteristic,
+                            "255255255",
+                            1000 * 60 * 60,
+                            1000,
+                          ),
                           characteristic: characteristic,
                         ),
                       ],
@@ -71,17 +76,26 @@ class ViewServices extends StatelessWidget {
     );
   }
 
-  void _onCharaCardPressed(BuildContext context,
-      BluetoothCharacteristic characteristic, String data) {
-    sl<RemoteServicesBloc>().add(StreamData(ToStreamEntity(
+  void _onCharaCardPressed(
+    BuildContext context,
+    BluetoothCharacteristic characteristic,
+    String data,
+    int duration,
+    int interval,
+  ) {
+    ToStreamEntity toStreamEntity = ToStreamEntity(
       characteristic: characteristic,
       data: data,
-    )));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.black,
-        content: Text('Streaming to ${characteristic.uuid.toString()}...'),
-      ),
+      duration: duration,
+      interval: interval,
     );
+    // sl<RemoteServicesBloc>().add(StreamData(toStreamEntity));
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     backgroundColor: Colors.black,
+    //     content: Text('Streaming to ${characteristic.uuid.toString()}...'),
+    //   ),
+    // );
+    Navigator.pushNamed(context, '/StreamData', arguments: toStreamEntity);
   }
 }

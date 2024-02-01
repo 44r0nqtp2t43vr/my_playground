@@ -26,7 +26,20 @@ class DeviceRepositoryImpl implements DeviceRepository {
 
   @override
   Future<void> streamData(
-      BluetoothCharacteristic characteristic, String data) async {
-    await _controller.writeStream(characteristic, data);
+    BluetoothCharacteristic characteristic,
+    String data,
+    int duration,
+    int interval,
+  ) async {
+    await _controller.writeStream(characteristic, data, duration, interval);
+  }
+
+  @override
+  Future<void> restartStream(
+    String data,
+    int duration,
+    int interval,
+  ) async {
+    await _controller.restartStream(data, duration, interval);
   }
 }

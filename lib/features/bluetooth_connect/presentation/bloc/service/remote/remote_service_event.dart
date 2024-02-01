@@ -17,6 +17,10 @@ class GetServices extends RemoteServicesEvent {
       : super(targetDevice: targetDevice);
 }
 
-class StreamData extends RemoteServicesEvent {
-  const StreamData(ToStreamEntity toStream) : super(toStream: toStream);
+class StreamDataEvent extends RemoteServicesEvent {
+  const StreamDataEvent(ToStreamEntity toStream) : super(toStream: toStream);
+}
+
+class RestartStream extends RemoteServicesEvent {
+  const RestartStream(ToStreamEntity toStream) : super(toStream: toStream);
 }

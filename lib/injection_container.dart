@@ -6,6 +6,7 @@ import 'package:my_playground/features/bluetooth_connect/domain/repository/devic
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/get_scanres.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/get_services.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/refresh_services.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/usecases/restart_stream.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/device/remote/remote_device_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
@@ -56,6 +57,8 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<RefreshServicesUseCase>(RefreshServicesUseCase(sl()));
 
   sl.registerSingleton<StreamDataUseCase>(StreamDataUseCase(sl()));
+
+  sl.registerSingleton<RestartStreamUseCase>(RestartStreamUseCase(sl()));
 
   // Blocs
   sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));

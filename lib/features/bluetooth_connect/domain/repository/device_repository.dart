@@ -6,7 +6,17 @@ abstract class DeviceRepository {
   Future<Stream<List<ScanResult>>> getScanResults();
   Future<List<BluetoothService>> getServices();
   Future<void> connectToDevice(BluetoothDevice targetDevice);
-  Future<void> streamData(BluetoothCharacteristic characteristic, String data);
+  Future<void> streamData(
+    BluetoothCharacteristic characteristic,
+    String data,
+    int duration,
+    int interval,
+  );
+  Future<void> restartStream(
+    String data,
+    int duration,
+    int interval,
+  );
 
   // Database methods
   // Future<List<ArticleEntity>> getSavedArticles();

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/get_services.dart';
-import 'package:my_playground/features/bluetooth_connect/domain/usecases/refresh_services.dart';
+// import 'package:my_playground/features/bluetooth_connect/domain/usecases/refresh_services.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/usecases/restart_stream.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_event.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_state.dart';
@@ -8,27 +9,36 @@ import 'package:my_playground/features/bluetooth_connect/presentation/bloc/servi
 class RemoteServicesBloc extends Bloc<RemoteServicesEvent, RemoteServiceState> {
   final GetServicesUseCase _getServicesUseCase;
   final StreamDataUseCase _streamDataUseCase;
-  final RefreshServicesUseCase _refreshServicesUseCase;
+  final RestartStreamUseCase _restartStreamUseCase;
+  // final RefreshServicesUseCase _refreshServicesUseCase;
 
   RemoteServicesBloc(
     this._getServicesUseCase,
     this._streamDataUseCase,
-    this._refreshServicesUseCase,
+    this._restartStreamUseCase,
+    // this._refreshServicesUseCase,
   ) : super(const RemoteServiceLoading()) {
     on<GetServices>(onGetServices);
-    on<StreamData>(onStreamData);
+    on<StreamDataEvent>(onStreamData);
+    on<RestartStream>(onRestartStream);
   }
 
   void onGetServices(
       GetServices event, Emitter<RemoteServiceState> emit) async {
     final data = await _getServicesUseCase(params: event.targetDevice);
-    emit(RemoteServiceDone(data));
+    emit(RemoteServiceDone(services: data));
   }
 
-  void onStreamData(StreamData event, Emitter<RemoteServiceState> emit) async {
+  void onStreamData(
+      StreamDataEvent event, Emitter<RemoteServiceState> emit) async {
     await _streamDataUseCase(params: event.toStream);
-    final services = await _refreshServicesUseCase();
-    emit(RemoteServiceDone(services));
+    emit(RemoteServiceDone(toStream: event.toStream));
+  }
+
+  void onRestartStream(
+      RestartStream event, Emitter<RemoteServiceState> emit) async {
+    await _restartStreamUseCase(params: event.toStream);
+    emit(RemoteServiceDone(toStream: event.toStream));
   }
 
   // void onSaveArticle(

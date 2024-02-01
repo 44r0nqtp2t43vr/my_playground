@@ -9,6 +9,10 @@ class BleController extends GetxController {
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
   late BluetoothDevice targetDevice;
+  late BluetoothCharacteristic targetCharacteristic;
+  late String toStreamData;
+  late StreamController<String> streamController;
+  late Timer streamingTimer;
 
   Future<Stream<List<ScanResult>>> scanDevices() async {
     var blePermission = await Permission.bluetoothScan.status;
@@ -46,25 +50,69 @@ class BleController extends GetxController {
     await targetCharacteristic.write(bytes);
   }
 
-  Future writeStream(
-      BluetoothCharacteristic targetCharacteristic, String data) async {
-    StreamController<String> writeDataStreamController =
-        StreamController<String>();
-    // Subscribe to the writeDataStreamController.stream and execute writeData when data is available
-    writeDataStreamController.stream.listen((addedData) async {
+  Future<void> writeStream(
+    BluetoothCharacteristic newTargetCharacteristic,
+    String data,
+    int duration,
+    int interval,
+  ) async {
+    targetCharacteristic = newTargetCharacteristic;
+    streamController = StreamController<String>();
+    // Subscribe to the streamController.stream and execute writeData when data is available
+    streamController.stream.listen((addedData) async {
       await writeData(targetCharacteristic, addedData);
     });
-    // Create a timer that repeats every 20 milliseconds for a duration of 2 seconds
-    Timer.periodic(const Duration(milliseconds: 20), (Timer timer) {
-      if (timer.tick <= (2000 / 20)) {
-        writeDataStreamController.add(data);
-      } else {
-        // Cancel the timer after 2 seconds
-        timer.cancel();
-        // Close the stream controller to indicate that no more data will be added
-        writeDataStreamController.close();
-      }
-    });
+    // Create a timer that repeats every [duration] milliseconds for a duration of [interval] milliseconds
+    streamingTimer = Timer.periodic(
+      Duration(milliseconds: interval),
+      (Timer timer) {
+        if (timer.tick <= (duration / interval)) {
+          streamController.add("$data, $interval");
+        } else {
+          // Cancel the timer after [duration] milliseconds
+          timer.cancel();
+          // Close the stream controller to indicate that no more data will be added
+          streamController.close();
+        }
+      },
+    );
+  }
+
+  Future<void> restartStream(
+    String data,
+    int duration,
+    int interval,
+  ) async {
+    if (!streamController.isClosed) {
+      // Close current timer and stream
+      streamingTimer.cancel();
+      streamController.close();
+
+      // Create a new stream controller
+      streamController = StreamController<String>();
+
+      // Subscribe to the streamController.stream and execute writeData when data is available
+      streamController.stream.listen((addedData) async {
+        await writeData(targetCharacteristic, addedData);
+      });
+
+      // Create a timer that repeats every [duration] milliseconds for a duration of [interval] milliseconds
+      streamingTimer = Timer.periodic(
+        Duration(milliseconds: interval),
+        (Timer timer) {
+          if (timer.tick <= (duration / interval)) {
+            streamController.add("$data, $interval");
+          } else {
+            // Cancel the timer after [duration] milliseconds
+            timer.cancel();
+            // Close the stream controller to indicate that no more data will be added
+            streamController.close();
+          }
+        },
+      );
+    } else {
+      // Handle the case where streamController is null or already closed
+    }
   }
 
   Stream<List<ScanResult>> get scanResults => flutterBlue.scanResults;
