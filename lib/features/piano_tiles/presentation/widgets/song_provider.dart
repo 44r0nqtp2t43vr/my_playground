@@ -1,4 +1,4 @@
-import 'package:my_playground/features/piano_tiles/presentation/widgets/note.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 
 List<Note> initNotes() {
   return [
@@ -13,6 +13,9 @@ List<Note> initNotes() {
     Note(7, 2),
     Note(8, 3),
     Note(9, 2),
+    Note(10, 0),
+    Note(10, 1),
+    Note(10, 2),
     Note(10, 3),
     Note(10, 4),
     Note(11, 0),
@@ -25,6 +28,9 @@ List<Note> initNotes() {
     Note(17, 2),
     Note(18, 3),
     Note(19, 2),
+    Note(20, 0),
+    Note(20, 1),
+    Note(20, 2),
     Note(20, 3),
     Note(20, 4),
     Note(21, 1),
@@ -37,6 +43,9 @@ List<Note> initNotes() {
     Note(27, 2),
     Note(28, 3),
     Note(29, 2),
+    Note(30, 0),
+    Note(30, 1),
+    Note(30, 2),
     Note(30, 3),
     Note(30, 4),
     Note(31, 1),
@@ -49,11 +58,15 @@ List<Note> initNotes() {
     Note(37, 2),
     Note(38, 3),
     Note(39, 2),
+    Note(40, 0),
+    Note(40, 1),
+    Note(40, 2),
     Note(40, 3),
     Note(40, 4),
     Note(41, -1),
     Note(42, -1),
     Note(43, -1),
     Note(44, -1),
+    Note(45, -1),
   ];
 }

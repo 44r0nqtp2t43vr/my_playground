@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_playground/features/piano_tiles/presentation/widgets/note.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 
 class Tile extends StatelessWidget {
   final NoteState? state;

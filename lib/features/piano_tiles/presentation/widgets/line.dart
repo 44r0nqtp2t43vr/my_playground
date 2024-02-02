@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:my_playground/features/piano_tiles/presentation/widgets/note.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/tile.dart';
 
 class Line extends AnimatedWidget {
-  final int? lineNumber;
-  final List<Note>? currentNotes;
-  final Function(Note)? onTileTap;
+  final int lineNumber;
+  final int currentNoteIndex;
+  final List<Note> currentNotes;
+  final Function(Note) onTileTap;
 
   const Line(
       {required Key key,
-      this.currentNotes,
-      this.lineNumber,
-      this.onTileTap,
+      required this.currentNotes,
+      required this.currentNoteIndex,
+      required this.lineNumber,
+      required this.onTileTap,
       required Animation<double> animation})
       : super(key: key, listenable: animation);
 
@@ -24,12 +26,12 @@ class Line extends AnimatedWidget {
 
     //get only notes for that line
     List<Note> thisLineNotes =
-        currentNotes!.where((note) => note.line == lineNumber).toList();
+        currentNotes.where((note) => note.line == lineNumber).toList();
 
     //map notes to widgets
     List<Widget> tiles = thisLineNotes.map((note) {
       //specify note distance from top
-      int index = currentNotes!.indexOf(note);
+      int index = note.orderNumber - currentNoteIndex;
       double offset = (3 - index + animation!.value) * tileHeight;
 
       return Transform.translate(
@@ -37,7 +39,7 @@ class Line extends AnimatedWidget {
         child: Tile(
           height: tileHeight,
           state: note.state,
-          onTap: () => onTileTap!(note),
+          onTap: () => onTileTap(note),
           key: GlobalKey(),
         ),
       );

@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/line.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/line_divider.dart';
-import 'package:my_playground/features/piano_tiles/presentation/widgets/note.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/song_provider.dart';
 
 class PlayGame extends StatefulWidget {
@@ -18,8 +18,7 @@ class _PlayGameState extends State<PlayGame>
   List<Note> notes = initNotes();
   late AnimationController animationController;
   int currentNoteIndex = 0;
-  int points = 0;
-  bool hasStarted = false;
+  bool hasStarted = true;
   bool isPlaying = true;
 
   @override
@@ -29,14 +28,22 @@ class _PlayGameState extends State<PlayGame>
         vsync: this, duration: const Duration(milliseconds: 300));
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed && isPlaying) {
-        if (notes[currentNoteIndex].state != NoteState.tapped) {
-          //game over
-          setState(() {
-            isPlaying = false;
-            notes[currentNoteIndex].state = NoteState.missed;
-          });
-          animationController.reverse().then((_) => _showFinishDialog());
-        } else if (currentNoteIndex == notes.length - 5) {
+        // if (notes[currentNoteIndex].state != NoteState.tapped) {
+        //   //game over
+        //   setState(() {
+        //     isPlaying = false;
+        //     notes[currentNoteIndex].state = NoteState.missed;
+        //   });
+        //   animationController.reverse().then((_) => _showFinishDialog());
+        // } else if (currentNoteIndex == notes.length - 5) {
+        //   //song finished
+        //   _showFinishDialog();
+        // } else {
+        //   setState(() => ++currentNoteIndex);
+        //   animationController.forward(from: 0);
+        // }
+
+        if (currentNoteIndex == notes.last.orderNumber - 5) {
           //song finished
           _showFinishDialog();
         } else {
@@ -45,6 +52,7 @@ class _PlayGameState extends State<PlayGame>
         }
       }
     });
+    animationController.forward();
   }
 
   @override
@@ -76,7 +84,6 @@ class _PlayGameState extends State<PlayGame>
               _drawLine(4),
             ],
           ),
-          _drawPoints(),
         ],
       ),
     );
@@ -87,7 +94,6 @@ class _PlayGameState extends State<PlayGame>
       hasStarted = false;
       isPlaying = true;
       notes = initNotes();
-      points = 0;
       currentNoteIndex = 0;
     });
     animationController.reset();
@@ -98,57 +104,70 @@ class _PlayGameState extends State<PlayGame>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Score: $points"),
+          title: const Text("Play again?"),
           actions: <Widget>[
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("RESTART"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _restart();
+              },
+              child: const Text("Restart"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text("Exit"),
             ),
           ],
         );
       },
-    ).then((_) => _restart());
+    );
+    // .then((_) => _restart());
   }
 
   void _onTap(Note note) {
-    bool areAllPreviousTapped = notes
-        .sublist(0, note.orderNumber)
-        .every((n) => n.state == NoteState.tapped);
-    print(areAllPreviousTapped);
-    if (areAllPreviousTapped) {
-      if (!hasStarted) {
-        setState(() => hasStarted = true);
-        animationController.forward();
-      }
-      _playNote(note);
-      setState(() {
-        note.state = NoteState.tapped;
-        ++points;
-      });
-    }
+    // bool areAllPreviousTapped = notes
+    //     .sublist(0, note.orderNumber)
+    //     .every((n) => n.state == NoteState.tapped);
+    // print(areAllPreviousTapped);
+    // if (areAllPreviousTapped) {
+    //   if (!hasStarted) {
+    //     setState(() => hasStarted = true);
+    //     animationController.forward();
+    //   }
+    //   _playNote(note);
+    //   setState(() {
+    //     note.state = NoteState.tapped;
+    //   });
+    // }
+    // if (!hasStarted) {
+    //   setState(() => hasStarted = true);
+    //   animationController.forward();
+    // }
+    _playNote(note);
+    setState(() {
+      note.state = NoteState.tapped;
+    });
   }
 
   _drawLine(int lineNumber) {
+    int lastRenderIndex = notes.indexOf(
+      notes.lastWhere(
+        (note) => note.orderNumber == currentNoteIndex + 5,
+        orElse: () => notes.last,
+      ),
+    );
+
     return Expanded(
       child: Line(
         lineNumber: lineNumber,
-        currentNotes: notes.sublist(currentNoteIndex, currentNoteIndex + 5),
+        currentNotes: notes.sublist(currentNoteIndex, lastRenderIndex),
+        currentNoteIndex: currentNoteIndex,
         onTileTap: _onTap,
         animation: animationController,
         key: GlobalKey(),
-      ),
-    );
-  }
-
-  _drawPoints() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 32.0),
-        child: Text(
-          "$points",
-          style: const TextStyle(color: Colors.red, fontSize: 60),
-        ),
       ),
     );
   }
