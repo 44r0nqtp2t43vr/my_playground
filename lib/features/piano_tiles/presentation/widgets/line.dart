@@ -3,6 +3,8 @@ import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/tile.dart';
 
 class Line extends AnimatedWidget {
+  final double height;
+  final double width;
   final int lineNumber;
   final int currentNoteIndex;
   final List<Note> currentNotes;
@@ -10,6 +12,8 @@ class Line extends AnimatedWidget {
 
   const Line(
       {required Key key,
+      required this.height,
+      required this.width,
       required this.currentNotes,
       required this.currentNoteIndex,
       required this.lineNumber,
@@ -20,9 +24,9 @@ class Line extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     Animation<double>? animation = super.listenable as Animation<double>?;
-    //get heights
-    double height = MediaQuery.of(context).size.height;
+    //get sizes
     double tileHeight = height / 4;
+    double tileWidth = width / 5;
 
     //get only notes for that line
     List<Note> thisLineNotes =
@@ -38,6 +42,7 @@ class Line extends AnimatedWidget {
         offset: Offset(0, offset),
         child: Tile(
           height: tileHeight,
+          width: tileWidth,
           state: note.state,
           onTap: () => onTileTap(note),
           key: GlobalKey(),

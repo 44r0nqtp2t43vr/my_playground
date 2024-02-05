@@ -2,35 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 
 class Tile extends StatelessWidget {
-  final NoteState? state;
-  final double? height;
-  final VoidCallback? onTap;
+  final double height;
+  final double width;
+  final NoteState state;
+  final VoidCallback onTap;
 
-  const Tile({required Key key, this.height, this.state, this.onTap})
+  const Tile(
+      {required Key key,
+      required this.height,
+      required this.width,
+      required this.state,
+      required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: height,
-      child: GestureDetector(
-        onTapDown: (_) => onTap!(),
-        child: Container(color: color),
+    return GestureDetector(
+      onTapDown: (_) => onTap(),
+      child: Container(
+        width: width,
+        height: height,
+        color: state == NoteState.tapped ? Colors.transparent : Colors.black,
       ),
     );
-  }
-
-  Color get color {
-    switch (state) {
-      case NoteState.ready:
-        return Colors.black;
-      case NoteState.missed:
-        return Colors.red;
-      case NoteState.tapped:
-        return Colors.transparent;
-      default:
-        return Colors.black;
-    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:my_playground/features/bluetooth_connect/domain/entities/to_stre
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/stream_data/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_devices/view_devices.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_services.dart/view_services.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
 import 'package:my_playground/features/piano_tiles/presentation/pages/play_game/play_game.dart';
 import 'package:my_playground/features/user/presentation/pages/login/login_screen.dart';
 import 'package:my_playground/features/user/presentation/pages/register/register_screen.dart';
@@ -26,7 +27,7 @@ class AppRoutes {
         return _materialRoute(const RegisterScreen());
 
       case '/PlayGame':
-        return _materialRoute(const PlayGame());
+        return _materialRoute(PlayGame(song: settings.arguments as Song));
 
       case '/ViewDevices':
         return _materialRoute(const ViewDevices());

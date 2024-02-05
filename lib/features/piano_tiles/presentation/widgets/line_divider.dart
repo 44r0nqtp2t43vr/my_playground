@@ -5,8 +5,10 @@ class LineDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Container(
-      height: double.infinity,
+      height: height,
       width: 1,
       color: Colors.white,
     );

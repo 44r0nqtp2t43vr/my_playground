@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_playground/features/piano_tiles/data/data_sources/song_provider.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
 import 'package:my_playground/features/user/presentation/widgets/button.dart';
 import 'package:my_playground/features/user/presentation/widgets/text_input.dart';
 
@@ -61,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16.0),
             Button(
-              onPressed: () => _onGameViewTapped(context),
+              onPressed: () => _onGameViewTapped(context, littleStarSong),
               text: 'Play Game',
             ),
             const SizedBox(height: 16.0),
@@ -85,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushNamed(context, '/ViewDevices');
   }
 
-  void _onGameViewTapped(BuildContext context) {
-    Navigator.pushNamed(context, '/PlayGame');
+  void _onGameViewTapped(BuildContext context, Song song) {
+    Navigator.pushNamed(context, '/PlayGame', arguments: song);
   }
 }
