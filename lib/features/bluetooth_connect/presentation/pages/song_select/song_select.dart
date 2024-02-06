@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:my_playground/core/widgets/button.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_event.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_state.dart';
 import 'package:my_playground/features/piano_tiles/data/data_sources/song_provider.dart';
+import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
 import 'package:my_playground/injection_container.dart';
 
 class SongSelect extends StatelessWidget {
@@ -35,27 +35,51 @@ class SongSelect extends StatelessWidget {
   }
 
   _buildBody(BuildContext context) {
+    SongProvider songProvider = SongProvider();
+
     return BlocBuilder<RemoteServicesBloc, RemoteServiceState>(
       builder: (_, state) {
         if (state is RemoteServiceDone) {
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                const SizedBox(height: 16.0, width: double.infinity),
-                Button(
-                  onPressed: () =>
-                      _onGameViewTapped(context, SongEnum.littleStar),
-                  text: 'Little Star',
+          // return SingleChildScrollView(
+          //   physics: const BouncingScrollPhysics(),
+          //   child: Column(
+          //     children: [
+          //       const SizedBox(height: 16.0, width: double.infinity),
+          //       Button(
+          //         onPressed: () =>
+          //             _onGameViewTapped(context, SongEnum.littleStar),
+          //         text: 'Little Star',
+          //       ),
+          //       const SizedBox(height: 16.0),
+          //       Button(
+          //         onPressed: () => _onGameViewTapped(context, SongEnum.canon),
+          //         text: 'Canon',
+          //       ),
+          //       const SizedBox(height: 16.0),
+          //     ],
+          //   ),
+          // );
+          return ListView.builder(
+            itemCount: songProvider.songs.length,
+            itemBuilder: (context, index) {
+              final Song song = songProvider.songs[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ListTile(
+                  tileColor: Colors.grey[100],
+                  title: Text(
+                    song.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onTap: () => _onGameViewTapped(context, song),
                 ),
-                const SizedBox(height: 16.0),
-                Button(
-                  onPressed: () => _onGameViewTapped(context, SongEnum.canon),
-                  text: 'Canon',
-                ),
-                const SizedBox(height: 16.0),
-              ],
-            ),
+              );
+            },
           );
         }
         return const SizedBox();
@@ -63,8 +87,7 @@ class SongSelect extends StatelessWidget {
     );
   }
 
-  void _onGameViewTapped(BuildContext context, SongEnum songEnum) {
-    Navigator.pushNamed(context, '/PlayGame',
-        arguments: SongProvider().getSong(songEnum));
+  void _onGameViewTapped(BuildContext context, Song song) {
+    Navigator.pushNamed(context, '/PlayGame', arguments: song);
   }
 }

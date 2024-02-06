@@ -63,7 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16.0),
             Button(
-              onPressed: () => _onGameViewTapped(context, littleStarSong),
+              onPressed: () =>
+                  _onGameViewTapped(context, SongProvider().songs[0]),
               text: 'Play Game',
             ),
             const SizedBox(height: 16.0),
