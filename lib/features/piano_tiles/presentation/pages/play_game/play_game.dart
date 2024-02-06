@@ -33,7 +33,7 @@ class _PlayGameState extends State<PlayGame>
       // duration: Duration(microseconds: widget.song.microsPerBeat),
       // duration: Duration(microseconds: 45),
       // duration: Duration(microseconds: 9675),
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(microseconds: 299725),
     );
 
     animationController.addStatusListener((status) {
@@ -60,7 +60,7 @@ class _PlayGameState extends State<PlayGame>
         } else {
           setState(() {
             currentNoteIndex++;
-            print(notes[currentNoteIndex].orderNumber);
+            // debugPrint(notes[currentNoteIndex].orderNumber.toString());
           });
           animationController.forward(from: 0);
         }
@@ -80,8 +80,8 @@ class _PlayGameState extends State<PlayGame>
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    double tileHeight = MediaQuery.of(context).size.height / 4;
+    double tileWidth = MediaQuery.of(context).size.width / 5;
 
     return Material(
       child: Stack(
@@ -93,15 +93,15 @@ class _PlayGameState extends State<PlayGame>
           ),
           Row(
             children: <Widget>[
-              _drawLine(0, height, width),
+              _drawLine(0, tileHeight, tileWidth),
               const LineDivider(),
-              _drawLine(1, height, width),
+              _drawLine(1, tileHeight, tileWidth),
               const LineDivider(),
-              _drawLine(2, height, width),
+              _drawLine(2, tileHeight, tileWidth),
               const LineDivider(),
-              _drawLine(3, height, width),
+              _drawLine(3, tileHeight, tileWidth),
               const LineDivider(),
-              _drawLine(4, height, width),
+              _drawLine(4, tileHeight, tileWidth),
             ],
           ),
         ],
@@ -150,70 +150,74 @@ class _PlayGameState extends State<PlayGame>
     // .then((_) => _restart());
   }
 
-  void _onTap(Note note) {
-    // bool areAllPreviousTapped = notes
-    //     .sublist(0, note.orderNumber)
-    //     .every((n) => n.state == NoteState.tapped);
-    // print(areAllPreviousTapped);
-    // if (areAllPreviousTapped) {
-    //   if (!hasStarted) {
-    //     setState(() => hasStarted = true);
-    //     animationController.forward();
-    //   }
-    //   _playNote(note);
-    //   setState(() {
-    //     note.state = NoteState.tapped;
-    //   });
-    // }
-    // if (!hasStarted) {
-    //   setState(() => hasStarted = true);
-    //   animationController.forward();
-    // }
-    _playNote(note);
-    setState(() {
-      note.state = NoteState.tapped;
-    });
-  }
+  // void _onTap(Note note) {
+  //   // bool areAllPreviousTapped = notes
+  //   //     .sublist(0, note.orderNumber)
+  //   //     .every((n) => n.state == NoteState.tapped);
+  //   // print(areAllPreviousTapped);
+  //   // if (areAllPreviousTapped) {
+  //   //   if (!hasStarted) {
+  //   //     setState(() => hasStarted = true);
+  //   //     animationController.forward();
+  //   //   }
+  //   //   _playNote(note);
+  //   //   setState(() {
+  //   //     note.state = NoteState.tapped;
+  //   //   });
+  //   // }
+  //   // if (!hasStarted) {
+  //   //   setState(() => hasStarted = true);
+  //   //   animationController.forward();
+  //   // }
 
-  _drawLine(int lineNumber, double height, double width) {
-    // int lastRenderIndex = notes.indexOf(
-    //   notes.lastWhere(
-    //     (note) => note.orderNumber == currentNoteIndex + 5,
-    //     orElse: () => notes.last,
-    //   ),
-    // );
+  //   // _playNote(note);
+  //   // setState(() {
+  //   //   note.state = NoteState.tapped;
+  //   // });
+  // }
+
+  _drawLine(int lineNumber, double tileHeight, double tileWidth) {
+    // for instances where having multiple notes per time unit is possible
+    int lastRenderIndex = notes.indexOf(
+      notes.lastWhere(
+        (note) => note.orderNumber == currentNoteIndex + 5,
+        orElse: () => notes.last,
+      ),
+    );
 
     return Expanded(
       child: Line(
-        height: height,
-        width: width,
+        tileHeight: tileHeight,
+        tileWidth: tileWidth,
         lineNumber: lineNumber,
-        currentNotes: notes.sublist(currentNoteIndex, currentNoteIndex + 5),
+        currentNotes: notes
+            .sublist(currentNoteIndex, lastRenderIndex)
+            .where((note) => note.line == lineNumber)
+            .toList(),
         currentNoteIndex: currentNoteIndex,
-        onTileTap: _onTap,
         animation: animationController,
         key: GlobalKey(),
       ),
     );
   }
 
-  _playNote(Note note) {
-    // switch (note.line) {
-    //   case 0:
-    //     player.play(AssetSource('audio/a.wav'));
-    //     return;
-    //   case 1:
-    //     player.play(AssetSource('audio/c.wav'));
-    //     return;
-    //   case 2:
-    //     player.play(AssetSource('audio/e.wav'));
-    //     return;
-    //   case 3:
-    //     player.play(AssetSource('audio/f.wav'));
-    //     return;
-    //   case 4:
-    //     player.play(AssetSource('audio/f.wav'));
-    //     return;
-    // }
-  }
+  // _playNote(Note note) {
+  //   // switch (note.line) {
+  //   //   case 0:
+  //   //     player.play(AssetSource('audio/a.wav'));
+  //   //     return;
+  //   //   case 1:
+  //   //     player.play(AssetSource('audio/c.wav'));
+  //   //     return;
+  //   //   case 2:
+  //   //     player.play(AssetSource('audio/e.wav'));
+  //   //     return;
+  //   //   case 3:
+  //   //     player.play(AssetSource('audio/f.wav'));
+  //   //     return;
+  //   //   case 4:
+  //   //     player.play(AssetSource('audio/f.wav'));
+  //   //     return;
+  //   // }
+  // }
 }
