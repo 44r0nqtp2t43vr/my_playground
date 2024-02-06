@@ -6,9 +6,10 @@ abstract class RemoteServicesEvent extends Equatable {
   final BluetoothDevice? targetDevice;
   final BluetoothCharacteristic? targetCharacteristic;
   final ToStreamEntity? toStream;
+  final String? data;
 
   const RemoteServicesEvent(
-      {this.targetDevice, this.targetCharacteristic, this.toStream});
+      {this.targetDevice, this.targetCharacteristic, this.toStream, this.data});
 
   @override
   List<Object> get props => [targetDevice!, toStream!];
@@ -22,6 +23,10 @@ class GetServices extends RemoteServicesEvent {
 class UpdateCharaEvent extends RemoteServicesEvent {
   const UpdateCharaEvent(BluetoothCharacteristic targetCharacteristic)
       : super(targetCharacteristic: targetCharacteristic);
+}
+
+class WriteDataEvent extends RemoteServicesEvent {
+  const WriteDataEvent(String data) : super(data: data);
 }
 
 class StreamDataEvent extends RemoteServicesEvent {

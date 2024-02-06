@@ -48,8 +48,7 @@ class BleController extends GetxController {
     targetCharacteristic = newCharacteristic;
   }
 
-  Future writeData(
-      BluetoothCharacteristic targetCharacteristic, String data) async {
+  Future writeData(String data) async {
     List<int> bytes = utf8.encode(data);
     await targetCharacteristic.write(bytes);
   }
@@ -64,7 +63,7 @@ class BleController extends GetxController {
     streamController = StreamController<String>();
     // Subscribe to the streamController.stream and execute writeData when data is available
     streamController.stream.listen((addedData) async {
-      await writeData(targetCharacteristic, addedData);
+      await writeData(addedData);
     });
     // Create a timer that repeats every [duration] milliseconds for a duration of [interval] milliseconds
     streamingTimer = Timer.periodic(
@@ -97,7 +96,7 @@ class BleController extends GetxController {
 
       // Subscribe to the streamController.stream and execute writeData when data is available
       streamController.stream.listen((addedData) async {
-        await writeData(targetCharacteristic, addedData);
+        await writeData(addedData);
       });
 
       // Create a timer that repeats every [duration] milliseconds for a duration of [interval] milliseconds

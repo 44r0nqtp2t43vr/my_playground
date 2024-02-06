@@ -8,6 +8,7 @@ abstract class DeviceRepository {
   Future<void> connectToDevice(BluetoothDevice targetDevice);
   Future<void> updateCharacteristic(
       BluetoothCharacteristic targetCharacteristic);
+  Future<void> writeData(String data);
   Future<void> streamData(
     BluetoothCharacteristic characteristic,
     String data,

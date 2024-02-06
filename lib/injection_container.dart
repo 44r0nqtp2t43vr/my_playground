@@ -9,6 +9,7 @@ import 'package:my_playground/features/bluetooth_connect/domain/usecases/refresh
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/restart_stream.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/usecases/update_chara.dart';
+import 'package:my_playground/features/bluetooth_connect/domain/usecases/write_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/device/remote/remote_device_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
 import 'package:my_playground/features/daily_news/data/data_sources/local/app_database.dart';
@@ -59,6 +60,8 @@ Future<void> initializeDependencies() async {
 
   sl.registerSingleton<UpdateCharaUseCase>(UpdateCharaUseCase(sl()));
 
+  sl.registerSingleton<WriteDataUseCase>(WriteDataUseCase(sl()));
+
   sl.registerSingleton<StreamDataUseCase>(StreamDataUseCase(sl()));
 
   sl.registerSingleton<RestartStreamUseCase>(RestartStreamUseCase(sl()));
@@ -72,5 +75,5 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<RemoteDevicesBloc>(() => RemoteDevicesBloc(sl()));
 
   sl.registerFactory<RemoteServicesBloc>(
-      () => RemoteServicesBloc(sl(), sl(), sl(), sl()));
+      () => RemoteServicesBloc(sl(), sl(), sl(), sl(), sl()));
 }

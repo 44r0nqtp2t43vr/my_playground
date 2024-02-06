@@ -32,6 +32,11 @@ class DeviceRepositoryImpl implements DeviceRepository {
   }
 
   @override
+  Future<void> writeData(String data) async {
+    await _controller.writeData(data);
+  }
+
+  @override
   Future<void> streamData(
     BluetoothCharacteristic characteristic,
     String data,

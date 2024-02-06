@@ -34,14 +34,10 @@ class Line extends AnimatedWidget {
 
       return Transform.translate(
         offset: Offset(0, offset),
-        child: GestureDetector(
-          onTapDown: (_) => note.state = NoteState.tapped,
-          child: Tile(
-            height: tileHeight,
-            width: tileWidth,
-            state: note.state,
-            key: GlobalKey(),
-          ),
+        child: Tile(
+          height: tileHeight,
+          width: tileWidth,
+          key: GlobalKey(),
         ),
       );
     }).toList();

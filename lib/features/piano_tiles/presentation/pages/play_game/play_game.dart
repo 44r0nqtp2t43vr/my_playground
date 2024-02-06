@@ -1,9 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
+import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_event.dart';
 import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/line.dart';
 import 'package:my_playground/features/piano_tiles/presentation/widgets/line_divider.dart';
 import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
+import 'package:my_playground/injection_container.dart';
 
 class PlayGame extends StatefulWidget {
   final Song song;
@@ -27,12 +30,8 @@ class _PlayGameState extends State<PlayGame>
   void initState() {
     super.initState();
     notes = List.from(widget.song.songNotes);
-    // notes = initNotes();
     animationController = AnimationController(
       vsync: this,
-      // duration: Duration(microseconds: widget.song.microsPerBeat),
-      // duration: Duration(microseconds: 45),
-      // duration: Duration(microseconds: 9675),
       duration: const Duration(microseconds: 299725),
     );
 
@@ -54,9 +53,7 @@ class _PlayGameState extends State<PlayGame>
         // }
 
         if (currentNoteIndex == notes.last.orderNumber - 5) {
-          //song finished
-          player.stop();
-          _showFinishDialog();
+          _onEnd();
         } else {
           setState(() {
             currentNoteIndex++;
@@ -64,6 +61,12 @@ class _PlayGameState extends State<PlayGame>
           });
           animationController.forward(from: 0);
         }
+      }
+    });
+    animationController.addListener(() {
+      if (animationController.value > 0.50 &&
+          currentNoteIndex != notes.last.orderNumber - 5) {
+        _onPass(notes[currentNoteIndex].line);
       }
     });
     player
@@ -109,6 +112,29 @@ class _PlayGameState extends State<PlayGame>
     );
   }
 
+  void _onPass(int lineNumber) {
+    if (lineNumber == -1) {
+      return;
+    } else {
+      String data = "<000000000000000000000000000000>";
+      switch (lineNumber) {
+        case 0:
+          data = "<255255000000000000000000000000>";
+        case 1:
+          data = "<000000255255000000000000000000>";
+        case 2:
+          data = "<000000000000255255000000000000>";
+        case 3:
+          data = "<000000000000000000255255000000>";
+        case 4:
+          data = "<000000000000000000000000255255>";
+        default:
+          data = "<000000000000000000000000000000>";
+      }
+      sl<RemoteServicesBloc>().add(WriteDataEvent(data));
+    }
+  }
+
   void _restart() {
     setState(() {
       notes = List.from(widget.song.songNotes);
@@ -122,7 +148,10 @@ class _PlayGameState extends State<PlayGame>
         .then((value) => animationController.forward());
   }
 
-  void _showFinishDialog() {
+  void _onEnd() {
+    player.stop();
+    sl<RemoteServicesBloc>()
+        .add(const WriteDataEvent("<000000000000000000000000000000>"));
     showDialog(
       context: context,
       builder: (context) {
@@ -147,34 +176,7 @@ class _PlayGameState extends State<PlayGame>
         );
       },
     );
-    // .then((_) => _restart());
   }
-
-  // void _onTap(Note note) {
-  //   // bool areAllPreviousTapped = notes
-  //   //     .sublist(0, note.orderNumber)
-  //   //     .every((n) => n.state == NoteState.tapped);
-  //   // print(areAllPreviousTapped);
-  //   // if (areAllPreviousTapped) {
-  //   //   if (!hasStarted) {
-  //   //     setState(() => hasStarted = true);
-  //   //     animationController.forward();
-  //   //   }
-  //   //   _playNote(note);
-  //   //   setState(() {
-  //   //     note.state = NoteState.tapped;
-  //   //   });
-  //   // }
-  //   // if (!hasStarted) {
-  //   //   setState(() => hasStarted = true);
-  //   //   animationController.forward();
-  //   // }
-
-  //   // _playNote(note);
-  //   // setState(() {
-  //   //   note.state = NoteState.tapped;
-  //   // });
-  // }
 
   _drawLine(int lineNumber, double tileHeight, double tileWidth) {
     // for instances where having multiple notes per time unit is possible
@@ -200,24 +202,4 @@ class _PlayGameState extends State<PlayGame>
       ),
     );
   }
-
-  // _playNote(Note note) {
-  //   // switch (note.line) {
-  //   //   case 0:
-  //   //     player.play(AssetSource('audio/a.wav'));
-  //   //     return;
-  //   //   case 1:
-  //   //     player.play(AssetSource('audio/c.wav'));
-  //   //     return;
-  //   //   case 2:
-  //   //     player.play(AssetSource('audio/e.wav'));
-  //   //     return;
-  //   //   case 3:
-  //   //     player.play(AssetSource('audio/f.wav'));
-  //   //     return;
-  //   //   case 4:
-  //   //     player.play(AssetSource('audio/f.wav'));
-  //   //     return;
-  //   // }
-  // }
 }
