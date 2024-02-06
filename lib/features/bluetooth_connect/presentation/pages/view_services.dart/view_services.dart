@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:my_playground/features/bluetooth_connect/domain/entities/to_stream.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_bloc.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_event.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/bloc/service/remote/remote_service_state.dart';
@@ -53,13 +52,15 @@ class ViewServices extends StatelessWidget {
                     children: [
                       for (var characteristic in service.characteristics) ...[
                         CharaCard(
-                          onTap: () => _onCharaCardPressed(
-                            context,
-                            characteristic,
-                            "<255255255255255000000000000000>",
-                            1000 * 60 * 60,
-                            20,
-                          ),
+                          // onTap: () => _onCharaCardPressed(
+                          //   context,
+                          //   characteristic,
+                          //   "<255255255255255000000000000000>",
+                          //   1000 * 60 * 60,
+                          //   20,
+                          // ),
+                          onTap: () =>
+                              _onCharaCardPressed(context, characteristic),
                           characteristic: characteristic,
                         ),
                       ],
@@ -76,26 +77,32 @@ class ViewServices extends StatelessWidget {
     );
   }
 
+  // old method for metronome
+  // void _onCharaCardPressed(
+  //   BuildContext context,
+  //   BluetoothCharacteristic characteristic,
+  //   String data,
+  //   int duration,
+  //   int interval,
+  // ) {
+  //   ToStreamEntity toStreamEntity = ToStreamEntity(
+  //     characteristic: characteristic,
+  //     data: data,
+  //     duration: duration,
+  //     interval: interval,
+  //   );
+  //   // sl<RemoteServicesBloc>().add(StreamData(toStreamEntity));
+  //   // ScaffoldMessenger.of(context).showSnackBar(
+  //   //   SnackBar(
+  //   //     backgroundColor: Colors.black,
+  //   //     content: Text('Streaming to ${characteristic.uuid.toString()}...'),
+  //   //   ),
+  //   // );
+  //   Navigator.pushNamed(context, '/StreamData', arguments: toStreamEntity);
+  // }
+
   void _onCharaCardPressed(
-    BuildContext context,
-    BluetoothCharacteristic characteristic,
-    String data,
-    int duration,
-    int interval,
-  ) {
-    ToStreamEntity toStreamEntity = ToStreamEntity(
-      characteristic: characteristic,
-      data: data,
-      duration: duration,
-      interval: interval,
-    );
-    // sl<RemoteServicesBloc>().add(StreamData(toStreamEntity));
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     backgroundColor: Colors.black,
-    //     content: Text('Streaming to ${characteristic.uuid.toString()}...'),
-    //   ),
-    // );
-    Navigator.pushNamed(context, '/StreamData', arguments: toStreamEntity);
+      BuildContext context, BluetoothCharacteristic characteristic) {
+    Navigator.pushNamed(context, '/SongSelect', arguments: characteristic);
   }
 }

@@ -25,6 +25,13 @@ class DeviceRepositoryImpl implements DeviceRepository {
   }
 
   @override
+  Future<void> updateCharacteristic(
+      BluetoothCharacteristic targetCharacteristic) {
+    _controller.updateCharacteristic(targetCharacteristic);
+    return Future.value(null);
+  }
+
+  @override
   Future<void> streamData(
     BluetoothCharacteristic characteristic,
     String data,

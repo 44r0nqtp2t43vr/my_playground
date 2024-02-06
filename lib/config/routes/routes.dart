@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:my_playground/features/bluetooth_connect/domain/entities/to_stream.dart';
+import 'package:my_playground/features/bluetooth_connect/presentation/pages/song_select/song_select.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/stream_data/stream_data.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_devices/view_devices.dart';
 import 'package:my_playground/features/bluetooth_connect/presentation/pages/view_services.dart/view_services.dart';
@@ -35,6 +36,11 @@ class AppRoutes {
       case '/ViewServices':
         return _materialRoute(
             ViewServices(targetDevice: settings.arguments as BluetoothDevice));
+
+      case '/SongSelect':
+        return _materialRoute(SongSelect(
+            targetCharacteristic:
+                settings.arguments as BluetoothCharacteristic));
 
       case '/StreamData':
         return _materialRoute(

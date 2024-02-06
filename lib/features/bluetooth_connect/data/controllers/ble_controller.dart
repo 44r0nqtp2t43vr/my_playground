@@ -44,6 +44,10 @@ class BleController extends GetxController {
     return services;
   }
 
+  void updateCharacteristic(BluetoothCharacteristic newCharacteristic) {
+    targetCharacteristic = newCharacteristic;
+  }
+
   Future writeData(
       BluetoothCharacteristic targetCharacteristic, String data) async {
     List<int> bytes = utf8.encode(data);

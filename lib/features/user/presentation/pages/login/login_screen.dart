@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_playground/features/piano_tiles/data/data_sources/song_provider.dart';
 import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
-import 'package:my_playground/features/user/presentation/widgets/button.dart';
+import 'package:my_playground/core/widgets/button.dart';
 import 'package:my_playground/features/user/presentation/widgets/text_input.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -1,5 +1,18 @@
 import 'package:my_playground/features/piano_tiles/domain/entities/song.dart';
 
+class SongProvider {
+  Song getSong(SongEnum songEnum) {
+    switch (songEnum) {
+      case SongEnum.littleStar:
+        return littleStarSong;
+    }
+  }
+}
+
+enum SongEnum {
+  littleStar,
+}
+
 Song littleStarSong = Song(
   beatFrames: [
     1,
