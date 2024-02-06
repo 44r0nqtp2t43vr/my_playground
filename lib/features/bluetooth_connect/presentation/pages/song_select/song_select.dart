@@ -49,6 +49,11 @@ class SongSelect extends StatelessWidget {
                   text: 'Little Star',
                 ),
                 const SizedBox(height: 16.0),
+                Button(
+                  onPressed: () => _onGameViewTapped(context, SongEnum.canon),
+                  text: 'Canon',
+                ),
+                const SizedBox(height: 16.0),
               ],
             ),
           );

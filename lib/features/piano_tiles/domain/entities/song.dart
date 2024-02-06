@@ -3,9 +3,10 @@ import 'dart:math';
 import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 
 class Song {
+  final String audioSource;
   final List<int> beatFrames;
 
-  Song({required this.beatFrames});
+  Song({required this.audioSource, required this.beatFrames});
 
   List<Note> get songNotes {
     List<Note> notes = [];

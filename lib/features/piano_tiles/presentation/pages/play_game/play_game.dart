@@ -67,7 +67,7 @@ class _PlayGameState extends State<PlayGame>
       }
     });
     player
-        .play(AssetSource('audio/littlestar.mp3'))
+        .play(AssetSource(widget.song.audioSource))
         .then((value) => animationController.forward());
   }
 
@@ -118,7 +118,7 @@ class _PlayGameState extends State<PlayGame>
     });
     animationController.reset();
     player
-        .play(AssetSource('audio/littlestar.mp3'))
+        .play(AssetSource(widget.song.audioSource))
         .then((value) => animationController.forward());
   }
 
