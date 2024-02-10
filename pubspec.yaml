@@ -75,11 +75,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/audio/forestofblocks.mp3
-    - assets/audio/littlestar.mp3
-    - assets/audio/canon.mp3
-    - assets/audio/waltzoftheflowers.mp3
-    - assets/images/background.jpg
+    - assets/audio/
+    - assets/images/
 
   fonts:
     - family: Muli

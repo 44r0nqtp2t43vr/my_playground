@@ -4,12 +4,14 @@ import 'package:my_playground/features/piano_tiles/domain/entities/note.dart';
 
 class Song {
   final String title;
+  final String artist;
   final String audioSource;
   final double tempo;
   final List<int> beatFrames;
 
   Song({
     required this.title,
+    required this.artist,
     required this.audioSource,
     required this.tempo,
     required this.beatFrames,
